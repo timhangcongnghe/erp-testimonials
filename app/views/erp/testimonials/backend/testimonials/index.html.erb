@@ -1,25 +1,46 @@
-<p id="notice"><%= notice %></p>
+<% content_for :title do %>
+    <%= t('.testimonials') %>
+<% end %>
 
-<h1>Testimonials</h1>
+<% content_for :page_title do %>
+    <i class="fa fa-folder"></i> <%= t('.testimonials') %>
+<% end %>
 
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<% content_for :page_toolbar do %>
+    <%= erp_component('button/create', {
+        text: t('.create'),
+        href: erp_testimonials.new_backend_testimonial_path,
+        class: 'btn-noborder'
+    }) %>
+<% end %>
 
-  <tbody>
-    <% @testimonials.each do |testimonial| %>
-      <tr>
-        <td><%= link_to 'Show', testimonial %></td>
-        <td><%= link_to 'Edit', edit_testimonial_path(testimonial) %></td>
-        <td><%= link_to 'Destroy', testimonial, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Testimonial', new_testimonial_path %>
+<%= erp_datalist(
+    url: erp_testimonials.list_backend_testimonials_path,
+    keywords: [
+        {
+            text: t('.author'), name: 'erp_testimonials_testimonials.author'
+        }
+    ],
+    actions: [
+        {
+            text: '<i class="fa fa-trash"></i> '+t('.delete'),
+            url: erp_testimonials.delete_all_backend_testimonials_path,
+            data_method: 'DELETE',
+            data_confirm: t('delete_confirm')
+        }
+    ],
+    filters: [
+    ],
+    columns: [
+        {
+            text: t('.author'), name: 'author', value: true, checked: true
+        },
+        {
+            text: t('.content'), name: 'content', value: true, checked: true
+        },
+        {
+            text: t('created_at'), name: 'created_at', value: true, checked: true
+        }
+    ],
+    sort: { sort_by: 'erp_testimonials_testimonials.author', sort_direction: 'desc' }
+) %>    

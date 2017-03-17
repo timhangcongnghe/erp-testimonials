@@ -3,19 +3,22 @@ module Erp
     module Backend
       class TestimonialsController < Erp::Backend::BackendController
         before_action :set_testimonial, only: [:show, :edit, :update, :destroy]
+        before_action :set_testimonials, only: [:delete_all]
     
         # GET /testimonials
-        def index
-          @testimonials = Testimonial.all
-        end
-    
-        # GET /testimonials/1
-        def show
+        def list
+          @testimonials = Testimonial.search(params).paginate(:page => params[:page], :per_page => 10)
+          
+          render layout: nil
         end
     
         # GET /testimonials/new
         def new
           @testimonial = Testimonial.new
+          
+          if request.xhr?
+            render '_form', layout: nil, locals: {category: @category}
+          end
         end
     
         # GET /testimonials/1/edit
@@ -25,18 +28,39 @@ module Erp
         # POST /testimonials
         def create
           @testimonial = Testimonial.new(testimonial_params)
-    
+          
           if @testimonial.save
-            redirect_to @testimonial, notice: 'Testimonial was successfully created.'
+            if request.xhr?
+              render json: {
+                status: 'success',
+                text: @testimonial.author,
+                value: @testimonial.id
+              }
+            else
+              redirect_to erp_testimonials.edit_backend_testimonial_path(@testimonial), notice: t('.success')
+            end
           else
-            render :new
+            if params.to_unsafe_hash['format'] == 'json'
+              render '_form', layout: nil, locals: {testimonial: @testimonial}
+            else
+              render :new
+            end
           end
         end
     
         # PATCH/PUT /testimonials/1
         def update
+        
           if @testimonial.update(testimonial_params)
-            redirect_to @testimonial, notice: 'Testimonial was successfully updated.'
+            if request.xhr?
+              render json: {
+                status: 'success',
+                text: @testimonial.author,
+                value: @testimonial.id
+              }
+            else
+              redirect_to erp_testimonials.edit_backend_testimonial_path(@testimonial), notice: t('.success')
+            end
           else
             render :edit
           end
@@ -45,7 +69,30 @@ module Erp
         # DELETE /testimonials/1
         def destroy
           @testimonial.destroy
-          redirect_to testimonials_url, notice: 'Testimonial was successfully destroyed.'
+          
+          respond_to do |format|
+            format.html { redirect_to erp_testimonials.backend_testimonials_path, notice: t('.success') }
+            format.json {
+              render json: {
+                'message': t('.success'),
+                'type': 'success'
+              }
+            }
+          end
+        end
+        
+        # DELETE /testimonials/delete_all?ids=1,2,3
+        def delete_all         
+          @testimonials.destroy_all
+          
+          respond_to do |format|
+            format.json {
+              render json: {
+                'message': t('.success'),
+                'type': 'success'
+              }
+            }
+          end          
         end
     
         private
@@ -53,10 +100,14 @@ module Erp
           def set_testimonial
             @testimonial = Testimonial.find(params[:id])
           end
+          
+          def set_testimonials
+            @testimonials = Testimonial.where(id: params[:ids])
+          end
     
           # Only allow a trusted parameter "white list" through.
           def testimonial_params
-            params.fetch(:testimonial, {})
+            params.fetch(:testimonial, {}).permit(:logo, :author, :content)
           end
       end
     end

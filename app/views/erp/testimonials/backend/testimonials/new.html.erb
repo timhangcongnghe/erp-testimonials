@@ -1,5 +1,28 @@
-<h1>New Testimonial</h1>
+<% content_for :title do %>
+    <%= t('.create') %>
+<% end %>
 
-<%= render 'form', testimonial: @testimonial %>
+<% content_for :page_title do %>    
+    <a href="<%= erp_testimonials.backend_testimonials_path %>">
+    <i class="fa fa-folder"></i> <%= t('.testimonials') %>
+    </a> / <%= t('.create') %>
+<% end %>
 
-<%= link_to 'Back', testimonials_path %>
+<% content_for :page_toolbar do %>
+    <div class="btn-group">
+        <div class="clearfix">
+        </div>
+    </div>
+<% end %>
+
+<div class="row">
+    <div class="col-md-8">
+        <% if @testimonial.errors.any? %>
+            <%= erp_form_control("form_error_message") %>
+        <% end %>
+        
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+        <%= render 'form', testimonial: @testimonial %>
+        <!-- END SAMPLE FORM PORTLET-->
+    </div>
+</div>

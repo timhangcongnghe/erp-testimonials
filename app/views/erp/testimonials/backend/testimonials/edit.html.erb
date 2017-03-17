@@ -1,6 +1,29 @@
-<h1>Editing Testimonial</h1>
+<% content_for :title do %>
+    <%= @testimonial.author %>
+<% end %>
 
-<%= render 'form', testimonial: @testimonial %>
+<% content_for :page_title do %>    
+    <a href="<%= erp_testimonials.backend_testimonials_path %>">
+    <i class="fa fa-folder"></i> <%= t('.testimonials') %>
+    </a> / <%= @testimonial.author %>
+<% end %>
 
-<%= link_to 'Show', @testimonial %> |
-<%= link_to 'Back', testimonials_path %>
+<% content_for :page_toolbar do %>
+    <%= erp_component('button/create', {
+        text: t('.create'),
+        href: erp_testimonials.new_backend_testimonial_path,
+        class: 'btn-noborder'
+    }) %>
+<% end %>
+
+<div class="row">
+    <div class="col-md-8">
+        <% if @testimonial.errors.any? %>
+            <%= erp_form_control("form_error_message") %>
+        <% end %>
+        
+        <!-- BEGIN SAMPLE FORM PORTLET-->
+        <%= render 'form', testimonial: @testimonial %>
+        <!-- END SAMPLE FORM PORTLET-->
+    </div>
+</div>
