@@ -58,5 +58,10 @@ module Erp::Testimonials
       
       return query
     end
+    
+    def self.get_testimonials
+			self.order('created_at DESC')
+		end
+    
   end
 end
