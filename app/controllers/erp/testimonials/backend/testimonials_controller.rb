@@ -107,7 +107,7 @@ module Erp
     
           # Only allow a trusted parameter "white list" through.
           def testimonial_params
-            params.fetch(:testimonial, {}).permit(:logo, :author, :content)
+            params.fetch(:testimonial, {}).permit(:logo, :author, :content, :workplace)
           end
       end
     end

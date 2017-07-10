@@ -29,9 +29,12 @@ vi:
           form:
             logo: "Hình ảnh / Logo"
             author: "Tác giả"
+            workplace: "Nơi làm việc/Đến từ"
             content: "Nội dung"
             placeholder_author: "Nhập tên tác giả"
             help_author: "Tên chủ của lời nhận xét, đóng góp"
+            placeholder_workplace: "Nhập tên nơi làm việc (công ty/nơi ở,...)"
+            help_workplace: "Người nhận xét đến từ đâu?"
   activerecord:
     errors:
       models:

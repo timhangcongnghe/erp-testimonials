@@ -23,6 +23,13 @@
                         required: true,
                         errors: testimonial.errors.full_messages_for(:author)
                     }) %>
+                    <%= erp_form_control("text", {
+                        name: 'testimonial[workplace]',
+                        value: testimonial.workplace,                   
+                        label: t('.workplace'),
+                        placeholder: t('.placeholder_workplace'),
+                        help: t('.help_workplace')
+                    }) %>
                     <%= erp_form_control("textarea", {
                         name: 'testimonial[content]',
                         value: testimonial.content,
