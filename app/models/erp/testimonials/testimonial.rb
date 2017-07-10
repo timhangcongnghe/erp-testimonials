@@ -60,7 +60,7 @@ module Erp::Testimonials
     end
     
     def self.get_testimonials
-			self.order('created_at DESC')
+			self.where(archived: false).order('created_at DESC')
 		end
     
   end
