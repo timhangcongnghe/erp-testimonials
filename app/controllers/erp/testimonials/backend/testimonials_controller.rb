@@ -4,9 +4,15 @@ module Erp
       class TestimonialsController < Erp::Backend::BackendController
         before_action :set_testimonial, only: [:show, :edit, :update, :destroy]
         before_action :set_testimonials, only: [:delete_all]
-    
+        
+        # GET /testimonials
+        def index
+          authorize! :view, Erp::Testimonials::Testimonial
+        end
+        
         # GET /testimonials
         def list
+          authorize! :view, Erp::Testimonials::Testimonial
           @testimonials = Testimonial.search(params).paginate(:page => params[:page], :per_page => 10)
           
           render layout: nil
@@ -15,6 +21,7 @@ module Erp
         # GET /testimonials/new
         def new
           @testimonial = Testimonial.new
+          authorize! :create, @testimonial
           
           if request.xhr?
             render '_form', layout: nil, locals: {category: @category}
@@ -23,11 +30,13 @@ module Erp
     
         # GET /testimonials/1/edit
         def edit
+          authorize! :edit, @testimonial
         end
     
         # POST /testimonials
         def create
           @testimonial = Testimonial.new(testimonial_params)
+          authorize! :create, @testimonial
           
           if @testimonial.save
             if request.xhr?
@@ -50,7 +59,7 @@ module Erp
     
         # PATCH/PUT /testimonials/1
         def update
-        
+          authorize! :edit, @testimonial
           if @testimonial.update(testimonial_params)
             if request.xhr?
               render json: {
@@ -82,7 +91,8 @@ module Erp
         end
         
         # DELETE /testimonials/delete_all?ids=1,2,3
-        def delete_all         
+        def delete_all
+          authorize! :delete, @testimonial
           @testimonials.destroy_all
           
           respond_to do |format|

@@ -18,7 +18,7 @@ vi:
             logo: "Hình ảnh"
             author: "Tác giả"
             content: "Nội dung"
-            delete: Xóa testimonial"
+            delete: "Xóa testimonial"
             no_matching_records_found: "Danh sách không tìm thấy"
           new:
             testimonials: "Testimonials"

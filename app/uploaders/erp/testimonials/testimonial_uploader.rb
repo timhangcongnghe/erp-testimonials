@@ -51,6 +51,10 @@ module Erp
       version :small do
         process resize_to_fill: [65, 65]
       end
+      
+      version :large do
+        process resize_to_fill: [100, 100]
+      end
     
     end
   end
